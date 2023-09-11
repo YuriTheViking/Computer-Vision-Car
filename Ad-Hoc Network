@@ -1,0 +1,11 @@
+Use the following command to create an ad-hoc network with a specific SSID (network name) and password:
+
+sudo /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -z
+sudo ifconfig en0 ssid YourSSID create && sudo ifconfig en0 inet 192.168.1.1 netmask 255.255.255.0
+sudo sysctl -w net.inet.ip.forwarding=1
+sudo /usr/sbin/natd -alias_address 192.168.1.1 -interface en0 -use_sockets -same_ports -unregistered_only -dynamic -clamp_mss
+sudo ipfw -f flush
+sudo ipfw add divert natd ip from any to any via en0
+sudo ipfw add pass all from any to any
+
+Replace YourSSID with the desired network name.
